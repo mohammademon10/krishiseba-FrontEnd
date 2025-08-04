@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Settings | KrishiSeba</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: linear-gradient(270deg, #ffffff 50%, #a8e063 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 240px;
+            background: #388e3c;
+            color: #fff;
+            padding: 40px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 18px rgba(56,142,60,0.08);
+        }
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 1.7em;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .sidebar-nav a {
+            padding: 16px 40px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.08em;
+            border-left: 4px solid transparent;
+            transition: background 0.2s, color 0.2s;
+        }
+        .sidebar-nav a.active,
+        .sidebar-nav a:hover {
+            background: #2e7031;
+            color: #a8e063;
+            border-left: 4px solid #a8e063;
+        }
+        .main-content {
+            flex: 1;
+            padding: 48px 40px 32px 40px;
+            margin-left: 240px;
+        }
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
+        .dashboard-header h1 {
+            font-size: 2em;
+            color: #032433;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .settings-section {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(56,142,60,0.10);
+            padding: 32px 28px;
+            max-width: 520px;
+            margin-bottom: 32px;
+        }
+        .settings-section h2 {
+            margin-top: 0;
+            color: #388e3c;
+            font-size: 1.3em;
+            margin-bottom: 18px;
+        }
+        .settings-section label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .settings-section input[type="text"],
+        .settings-section input[type="email"],
+        .settings-section input[type="password"] {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #b2dfdb;
+            font-size: 1em;
+            margin-bottom: 18px;
+        }
+        .settings-section button {
+            background: #388e3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 28px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .settings-section button:hover {
+            background: #2e7031;
+        }
+        .success-msg {
+            color: #43a047;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: none;
+        }
+        .error-msg {
+            color: #e53935;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: none;
+        }
+        @media (max-width: 900px) {
+            .main-content { padding: 18px 4px; margin-left: 0;}
+            .sidebar { width: 100%; height: auto; flex-direction: row; padding: 18px 0;}
+            .sidebar-nav { flex-direction: row; justify-content: center;}
+            .sidebar-nav a { padding: 12px 18px; font-size: 1em;}
+        }
+        @media (max-width: 600px) {
+            .dashboard-header h1 { font-size: 1.2em;}
+            .main-content { padding: 10px;}
+            .sidebar h2 { font-size: 1.1em;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>
+                <img src="1.jpg" alt="Logo" class="sidebar-logo">
+                Admin Panel
+            </h2>
+            <nav class="sidebar-nav">
+                <a href="AdminDashboard.html" data-section="dashboard">Dashboard</a>
+                <a href="adminUsers.html" data-section="users">Users</a>
+                <a href="adminPosts.html" data-section="posts">Posts</a>
+                <a href="adminReports.html" data-section="reports">Reports</a>
+                <a href="adminSettings.html" class="active" data-section="settings">Settings</a>
+                <a href="loginForAdmin.html" data-section="logout">Logout</a>
+            </nav>
+        </aside>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1>Admin Settings</h1>
+            </div>
+            <div class="settings-section">
+                <h2>Update Profile</h2>
+                <div class="success-msg" id="profileSuccess">Profile updated successfully!</div>
+                <form id="profileForm">
+                    <label>Name:
+                        <input type="text" id="adminName" value="Admin User">
+                    </label>
+                    <label>Email:
+                        <input type="email" id="adminEmail" value="admin@krishiseba.com">
+                    </label>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+            <div class="settings-section">
+                <h2>Change Password</h2>
+                <div class="success-msg" id="passwordSuccess">Password changed successfully!</div>
+                <div class="error-msg" id="passwordError">Passwords do not match!</div>
+                <form id="passwordForm">
+                    <label>Current Password:
+                        <input type="password" id="currentPassword">
+                    </label>
+                    <label>New Password:
+                        <input type="password" id="newPassword">
+                    </label>
+                    <label>Confirm New Password:
+                        <input type="password" id="confirmPassword">
+                    </label>
+                    <button type="submit">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Sidebar active state
+        document.querySelectorAll('.sidebar-nav a').forEach(function(item) {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Profile form
+        document.getElementById('profileForm').onsubmit = function(e) {
+            e.preventDefault();
+            document.getElementById('profileSuccess').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('profileSuccess').style.display = 'none';
+            }, 1800);
+        };
+
+        // Password form
+        document.getElementById('passwordForm').onsubmit = function(e) {
+            e.preventDefault();
+            var newPass = document.getElementById('newPassword').value;
+            var confirmPass = document.getElementById('confirmPassword').value;
+            if (newPass !== confirmPass || newPass === "") {
+                document.getElementById('passwordError').style.display = 'block';
+                document.getElementById('passwordSuccess').style.display = 'none';
+            } else {
+                document.getElementById('passwordError').style.display = 'none';
+                document.getElementById('passwordSuccess').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('passwordSuccess').style.display = 'none';
+                }, 1800);
+                document.getElementById('passwordForm').reset();
+            }
+        };
+    </script>

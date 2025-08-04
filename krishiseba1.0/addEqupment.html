@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Equipment | KrishiSeba</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --green: #4caf50;
+      --dark-green: #388e3c;
+      --light-bg: #f9fff9;
+      --focus-bg: #f1f8e9;
+      --border: #a5d6a7;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #e8f5e9, #c8e6c9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      animation: fadeIn 1.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-container {
+      background: #ffffff;
+      padding: 40px 35px;
+      border-radius: 18px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      animation: slideIn 0.8s ease forwards;
+    }
+
+    @keyframes slideIn {
+      0% {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .form-container h2 {
+      margin-bottom: 25px;
+      color: var(--dark-green);
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #2e7d32;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 13px 15px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 16px;
+      background: var(--light-bg);
+      transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--green);
+      background-color: var(--focus-bg);
+      box-shadow: 0 0 6px rgba(76, 175, 80, 0.25);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    input[type="file"] {
+      background-color: transparent;
+      border: none;
+      padding-left: 0;
+    }
+
+    button {
+      background-color: var(--green);
+      color: #fff;
+      font-weight: bold;
+      padding: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--dark-green);
+      transform: scale(1.03);
+      box-shadow: 0 6px 12px rgba(56, 142, 60, 0.3);
+    }
+
+    @media (max-width: 600px) {
+      .form-container {
+        padding: 30px 20px;
+      }
+
+      .form-container h2 {
+        font-size: 24px;
+      }
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 32px;
+      left: 32px;
+      z-index: 10;
+      display: inline-block;
+      color: #fff;
+      background: var(--green, #4caf50);
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.3s;
+      box-shadow: 0 2px 8px rgba(76,175,80,0.08);
+      animation: backBtnSlide 0.7s cubic-bezier(.23,1.01,.32,1) both;
+    }
+    @media (max-width: 600px) {
+      .back-btn {
+        top: 12px;
+        left: 12px;
+        font-size: 14px;
+        padding: 8px 14px;
+      }
+    }
+    .back-btn:hover {
+      background: var(--dark-green, #388e3c);
+      box-shadow: 0 4px 14px rgba(56,142,60,0.15);
+      transform: translateY(-2px) scale(1.04);
+    }
+    @keyframes backBtnSlide {
+      0% {
+        opacity: 0;
+        transform: translateX(-40px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    /* Animate form fields in sequence */
+    .animated {
+      opacity: 0;
+      transform: translateY(30px) scale(0.98);
+      animation: fadeInUpField 0.7s cubic-bezier(.23,1.01,.32,1) forwards;
+    }
+    @keyframes fadeInUpField {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .done-section {
+      text-align: center;
+      margin-top: 18px;
+      animation: fadeInUpField 0.7s cubic-bezier(.23,1.01,.32,1) forwards;
+    }
+    .done-btn {
+      display: inline-block;
+      background: var(--dark-green, #388e3c);
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 6px;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(56,142,60,0.10);
+      animation: backBtnSlide 0.7s cubic-bezier(.23,1.01,.32,1) both;
+    }
+    .done-btn:hover {
+      background: #256025;
+      transform: scale(1.04);
+      box-shadow: 0 4px 14px rgba(56,142,60,0.18);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(44, 62, 80, 0.25);
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 18px;
+      padding: 36px 32px 28px 32px;
+      box-shadow: 0 8px 32px rgba(56, 142, 60, 0.18);
+      text-align: center;
+      min-width: 280px;
+      animation: popIn 0.5s cubic-bezier(.23,1.01,.32,1);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      80% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .modal-icon {
+      font-size: 3rem;
+      color: var(--green, #4caf50);
+      margin-bottom: 12px;
+      animation: bounceIcon 0.7s;
+    }
+    @keyframes bounceIcon {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .modal-btn {
+      display: inline-block;
+      margin: 18px 8px 0 8px;
+      background: var(--green, #4caf50);
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(56,142,60,0.10);
+    }
+    .modal-btn:hover {
+      background: var(--dark-green, #388e3c);
+      transform: scale(1.04);
+    }
+    .close-btn {
+      background: #e0e0e0;
+      color: #222;
+    }
+    .close-btn:hover {
+      background: #bdbdbd;
+    }
+  </style>
+</head>
+
+
+
+
+<body>
+  
+  <div class="form-container">
+    <h2>Add New Equipment</h2>
+    <form>
+      <div class="form-group animated">
+        <label for="eq-name">Equipment Name</label>
+        <input type="text" id="eq-name" placeholder="E.g., Tractor, Harvester" required>
+      </div>
+
+      <div class="form-group animated" style="animation-delay:0.07s">
+        <label for="eq-category">Category</label>
+        <select id="eq-category" required>
+          <option value="" disabled selected>Select Category</option>
+          <option>Tractor</option>
+          <option>Seeder</option>
+          <option>Harvester</option>
+          <option>Sprayer</option>
+          <option>Plough</option>
+          <option>Rotavator</option>
+          <option>Transplanter</option>
+          <option>Combine</option>
+          <option>Power Tiller</option>
+          <option >Other</option>
+        </select>
+      </div>
+
+      <div class="form-group animated" style="animation-delay:0.14s">
+        <label for="eq-brand">Brand</label>
+        <input type="text" id="eq-brand" placeholder="E.g., John Deere, Kubota">
+      </div>
+
+      <div class="form-group animated" style="animation-delay:0.21s">
+        <label for="eq-condition">Condition</label>
+        <select id="eq-condition" required>
+          <option value="" disabled selected>Select Condition</option>
+          <option>New</option>
+          <option>Used - Good</option>
+          <option>Used - Needs Repair</option>
+        </select>
+      </div>
+
+      <div class="form-group animated" style="animation-delay:0.28s">
+        <label for="eq-price">Price per Day (BDT)</label>
+        <input type="number" id="eq-price" placeholder="Enter price" required>
+      </div>
+
+      <div class="form-group animated" style="animation-delay:0.35s">
+        <label for="eq-location">Location</label>
+        <input type="text" id="eq-location" placeholder="E.g., Dhaka, Rajshahi" required>
+      </div>
+
+      <div class="form-group animated" style="animation-delay:0.42s">
+        <label for="eq-description">Description</label>
+        <textarea id="eq-description" placeholder="Write a short description..."></textarea>
+      </div>
+
+      <div class="form-group animated" style="animation-delay:0.49s">
+        <label for="eq-image">Upload Image</label>
+        <input type="file" id="eq-image">
+      </div>
+
+      <button type="submit" class="animated" style="animation-delay:0.56s">Add Equipment</button>
+    </form>
+    <div class="done-section animated" style="animation-delay:0.65s">
+      <p style="margin: 24px 0 10px; color: #2e7d32; font-weight: 600; font-size: 17px;">
+        Done adding equipment?
+      </p>
+      <a href="provederDashboard.html" class="done-btn">Go Back to Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">&#10004;</div>
+      <h3>Equipment Added!</h3>
+      <p>Your equipment has been successfully added.</p>
+      <a href="provederDashboard.html" class="modal-btn">Go to Dashboard</a>
+      <button class="modal-btn close-btn" id="closeModalBtn">Add More</button>
+    </div>
+  </div>
+<script>
+document.querySelector('.form-container form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  document.getElementById('confirmationModal').classList.add('show');
+});
+document.getElementById('closeModalBtn').onclick = function() {
+  document.getElementById('confirmationModal').classList.remove('show');
+  document.querySelector('.form-container form').reset();
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiSeba - My Equipment</title>
+    <style>
+        /* ===== Reset & Base Styles ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #d0f0c0 0%, #a1d99b 100%);
+            color: #2e3a26;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ===== Sidebar ===== */
+        .sidebar {
+            width: 280px;
+            background: #4caf50;
+            color: white;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.2);
+            animation: slideInLeft 0.5s ease-out;
+            z-index: 100;
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-300px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { color: #e8f5e9; text-shadow: 0 0 8px #81c784; }
+            50% { color: #a5d6a7; text-shadow: 0 0 12px #66bb6a; }
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .sidebar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: left 0.4s ease;
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .sidebar-nav a:hover::before {
+            left: 0;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: #388e3c;
+            box-shadow: 0 0 15px #388e3c;
+        }
+
+        /* ===== Main Content ===== */
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem 3rem;
+            flex: 1;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Header ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #a5d6a7;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2e7d32;
+            letter-spacing: 0.5px;
+            animation: slideInRight 0.7s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #66bb6a;
+            object-fit: cover;
+            filter: drop-shadow(0 0 5px #66bb6a);
+            transition: all 0.4s ease;
+        }
+
+        .user-profile:hover .user-avatar {
+            transform: rotate(10deg) scale(1.1);
+            filter: drop-shadow(0 0 12px #81c784);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .user-location {
+            font-size: 0.875rem;
+            color: #4a6351;
+            font-weight: 500;
+        }
+
+        /* ===== My Equipment Section ===== */
+        .section-title {
+            font-size: 2rem;
+            color: #2e7d32;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 800;
+            animation: slideInRight 0.7s ease-out;
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .equipment-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(102, 187, 106, 0.25);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(102, 187, 106, 0.4);
+        }
+
+        .equipment-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .equipment-details {
+            padding: 1.5rem;
+        }
+
+        .equipment-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #388e3c;
+            margin-bottom: 0.75rem;
+        }
+
+        .equipment-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1b5e20;
+            margin-bottom: 1rem;
+        }
+
+        .equipment-specs {
+            display: flex;
+            justify-content: space-between;
+            color: #4a6351;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .equipment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn, .delete-btn {
+            flex: 1;
+            padding: 0.7rem 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .edit-btn {
+            background: #388e3c;
+            color: #fff;
+        }
+        .edit-btn:hover {
+            background: #2e7d32;
+        }
+        .delete-btn {
+            background: #e53935;
+            color: #fff;
+        }
+        .delete-btn:hover {
+            background: #b71c1c;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 992px) {
+            .equipment-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1.5rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .equipment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .user-name {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>
+                    <img src="1.jpg" alt="KrishiSeba Logo" class="sidebar-logo">
+                    KrishiSeba
+                </h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="provederDashboard.html">Dashboard</a>
+                <a href="addEqupment.html">Add Equipment</a>
+                <a href="myequpment.html" class="active">My Equipment</a>
+                <a href="myProfile.html">My Profile</a>
+                <a href="myOrders.html">Orders</a>
+                
+                <a href="messages.html">Messages</a>
+                
+                <a href="login.html">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <header class="page-header">
+                <h1>My Equipment</h1>
+                <div class="user-profile">
+                    
+                    <div class="user-info">
+                        
+                    </div>
+                </div>
+            </header>
+
+            <!-- My Equipment Section -->
+            <section>
+                <h2 class="section-title">Your Listed Equipment</h2>
+                <div class="equipment-grid">
+                    <!-- Equipment Card 1 -->
+                    <div class="equipment-card">
+                        <img src="tractor.jpg" alt="John Deere Tractor" class="equipment-image">
+                        <div class="equipment-details">
+                            <h3 class="equipment-title">John Deere Tractor</h3>
+                            <div class="equipment-price">৳1,200/day</div>
+                            <div class="equipment-specs">
+                                <span>Model: 5100</span>
+                                <span>50 HP</span>
+                            </div>
+                            <div class="equipment-actions">
+                                <button class="edit-btn">Edit</button>
+                                <button class="delete-btn">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Equipment Card 2 -->
+                    <div class="equipment-card">
+                        <img src="harvestingRice.jpg" alt="Combine Harvester" class="equipment-image">
+                        <div class="equipment-details">
+                            <h3 class="equipment-title">Combine Harvester</h3>
+                            <div class="equipment-price">৳2,500/day</div>
+                            <div class="equipment-specs">
+                                <span>Model: X9</span>
+                                <span>300 HP</span>
+                            </div>
+                            <div class="equipment-actions">
+                                <button class="edit-btn">Edit</button>
+                                <button class="delete-btn">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Equipment Card 3 -->
+                    <div class="equipment-card">
+                        <img src="ploughing.webp" alt="Rotary Plow" class="equipment-image">
+                        <div class="equipment-details">
+                            <h3 class="equipment-title">Rotary Plow</h3>
+                            <div class="equipment-price">৳800/day</div>
+                            <div class="equipment-specs">
+                                <span>Model: RP-12</span>
+                                <span>3-Blade</span>
+                            </div>
+                            <div class="equipment-actions">
+                                <button class="edit-btn">Edit</button>
+                                <button class="delete-btn">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more equipment cards as needed -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        // Sidebar active state
+        document.querySelectorAll('.sidebar-nav a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

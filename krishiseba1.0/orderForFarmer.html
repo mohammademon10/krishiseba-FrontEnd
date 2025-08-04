@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Place Order | KrishiSeba</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #f1f8e9, #dcedc8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .order-container {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 15px;
+      max-width: 550px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.5s ease forwards;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .order-container h2 {
+      text-align: center;
+      color: #388e3c;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #2e7d32;
+      font-weight: 600;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #a5d6a7;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+      background: #f9fff9;
+      transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #4caf50;
+      background-color: #f1f8e9;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+      transform: scale(1.02);
+    }
+    button a {
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .order-container {
+        padding: 25px 20px;
+      }
+
+      .order-container h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="order-container">
+    <h2>Place Your Order</h2>
+    <form>
+      <div class="form-group">
+        <label for="customer-name">Full Name</label>
+        <input type="text" id="customer-name" placeholder="Enter your name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="01XXXXXXXXX" required>
+      </div>
+
+      <div class="form-group">
+        <label for="equipment">Select Equipment</label>
+        <select id="equipment" required>
+          <option value="" disabled selected>Select equipment</option>
+          <option>Tractor</option>
+          <option>Harvester</option>
+          <option>Sprayer</option>
+          <option>Seeder</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" min="1" placeholder="Enter quantity" required>
+      </div>
+
+      <div class="form-group">
+        <label for="rental-days">Rental Duration (Days)</label>
+        <input type="number" id="rental-days" min="1" placeholder="How many days?" required>
+      </div>
+
+      <div class="form-group">
+        <label for="start-date">Start Date</label>
+        <input type="date" id="start-date" required>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Delivery Address</label>
+        <textarea id="address" placeholder="Enter your delivery location..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="payment-method">Payment Method</label>
+        <select id="payment-method" required>
+          <option value="" disabled selected>Select payment method</option>
+          <option>Cash on Delivery</option>
+          <option>bKash</option>
+          <option>Online Payment</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Additional Notes (Optional)</label>
+        <textarea id="notes" placeholder="Any extra instructions..."></textarea>
+      </div>
+
+      <button type="submit"><a href="orderconformationpage.html">Submit Order</a></button>
+      <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #555;">
+      &copy; 2025 KrishiSeba. All rights reserved.
+      </p>
+    </div>
+    
+    </form>
+  </div>
+<script>
+document.querySelector('.order-container form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Basic validation (HTML5 required already does most)
+    var name = document.getElementById('customer-name').value.trim();
+    var phone = document.getElementById('phone').value.trim();
+    var equipment = document.getElementById('equipment').value;
+    var quantity = document.getElementById('quantity').value;
+    var days = document.getElementById('rental-days').value;
+    var startDate = document.getElementById('start-date').value;
+    var address = document.getElementById('address').value.trim();
+    var payment = document.getElementById('payment-method').value;
+
+    if (!name || !phone || !equipment || !quantity || !days || !startDate || !address || !payment) {
+        alert("Please fill in all required fields.");
+        return false;
+    }
+
+    alert("Order submitted successfully!");
+    window.location.href = "orderconformationpage.html";
+});
+</script>
+</body>
+</html>

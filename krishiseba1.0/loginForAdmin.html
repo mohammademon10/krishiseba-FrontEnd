@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: linear-gradient(120deg, #e8f5e9, #a5d6a7);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(56, 142, 60, 0.15);
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Animation */
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            animation: fadeInUp 1s cubic-bezier(.23,1.01,.32,1) forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .login-container h2 {
+            margin-bottom: 1.5rem;
+            color: #388e3c;
+            letter-spacing: 1px;
+        }
+        .form-group {
+            width: 100%;
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.2s, box-shadow 0.3s;
+            background: #f9fff9;
+        }
+        .form-group input:focus {
+            border-color: #66bb6a;
+            outline: none;
+            box-shadow: 0 0 0 2px #a5d6a7;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(90deg, #43a047, #a5d6a7);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(67, 160, 71, 0.12);
+            /* Button animation */
+            animation: bounceIn 1.2s 0.5s both;
+        }
+        .login-btn:hover {
+            background: linear-gradient(90deg, #388e3c, #81c784);
+            transform: scale(1.04);
+            box-shadow: 0 6px 18px rgba(67, 160, 71, 0.18);
+        }
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            80% {
+                transform: scale(0.97);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .admin-icon {
+            font-size: 2.5rem;
+            color: #43a047;
+            margin-bottom: 0.7rem;
+            animation: iconPop 1.1s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes iconPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(-20deg);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.2) rotate(10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+        }
+        @media (max-width: 400px) {
+            .login-container {
+                padding: 1.5rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="admin-icon">&#128274;</div>
+        <h2>Admin Login</h2>
+        <form action="AdminDashboard.html" method="get">
+            <div class="form-group">
+                <label for="admin-username">Username</label>
+                <input type="text" id="admin-username" name="username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="admin-password">Password</label>
+                <input type="password" id="admin-password" name="password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+    </div>
+    <script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    var username = document.getElementById('admin-username').value.trim();
+    var password = document.getElementById('admin-password').value.trim();
+    if (!username || !password) {
+        alert("Please enter both username and password.");
+        e.preventDefault();
+        return false;
+    }
+    // Optionally, you can check for a hardcoded username/password here
+    // if (username !== "admin" || password !== "1234") {
+    //     alert("Invalid credentials.");
+    //     e.preventDefault();
+    //     return false;
+    // }
+    // On success, the form will redirect to AdminDashboard.html
+});
+    </script>
+</body>
+</html>

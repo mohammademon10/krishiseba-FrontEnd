@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KrishiSeba - Farmer Dashboard</title>
+  <style>
+    /* Reset and base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background: linear-gradient(135deg, #d0f0c0 0%, #a1d99b 100%);
+      min-height: 100vh;
+      display: flex;
+      color: #2e3a26;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: #4caf50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      position: fixed;
+      height: 100vh;
+      box-shadow: 3px 0 15px rgba(0, 0, 0, 0.2);
+      animation: slideInSidebar 0.5s ease forwards;
+      z-index: 10;
+    }
+
+    @keyframes slideInSidebar {
+      from {
+        transform: translateX(-300px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 50px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      user-select: none;
+      text-shadow: 1px 1px 2px #2e7d32;
+      font-size: 28px;
+      animation: pulseText 3s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    @keyframes pulseText {
+      0%, 100% {
+        color: #e8f5e9;
+        text-shadow: 0 0 8px #81c784;
+      }
+      50% {
+        color: #a5d6a7;
+        text-shadow: 0 0 12px #66bb6a;
+      }
+    }
+
+    .sidebar nav a {
+      color: white;
+      text-decoration: none;
+      padding: 16px 22px;
+      margin-bottom: 14px;
+      border-radius: 10px;
+      display: block;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      box-shadow: 0 0 5px transparent;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .sidebar nav a::before {
+      content: '';
+      position: absolute;
+      left: -100%;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.15);
+      transition: left 0.4s ease;
+      border-radius: 10px;
+      z-index: 1;
+    }
+
+    .sidebar nav a:hover::before {
+      left: 0;
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background: #388e3c;
+      box-shadow: 0 0 15px #388e3c;
+      z-index: 2;
+      color: #dcedc8;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 260px;
+      padding: 30px 50px;
+      flex: 1;
+      overflow-y: auto;
+      min-height: 100vh;
+      animation: fadeInContent 0.8s ease forwards;
+    }
+
+    @keyframes fadeInContent {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #a5d6a7;
+      padding-bottom: 10px;
+    }
+
+    header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2e7d32;
+      letter-spacing: 1.2px;
+      user-select: none;
+      animation: slideInHeader 0.7s ease forwards;
+    }
+
+    @keyframes slideInHeader {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      user-select: none;
+    }
+
+    .profile:hover {
+      transform: scale(1.05);
+    }
+
+    .profile img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3px solid #66bb6a;
+      object-fit: cover;
+      filter: drop-shadow(0 0 5px #66bb6a);
+      transition: transform 0.4s ease, filter 0.4s ease;
+    }
+
+    .profile:hover img {
+      transform: rotate(10deg) scale(1.2);
+      filter: drop-shadow(0 0 12px #81c784);
+    }
+
+    .profile span {
+      font-weight: 700;
+      font-size: 18px;
+      color: #2e7d32;
+      text-shadow: 0 0 3px #a5d6a7;
+    }
+
+    .profile .location {
+      font-size: 14px;
+      color: #4a6351;
+      font-weight: 600;
+    }
+
+    /* Dashboard cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px 35px;
+      box-shadow: 0 10px 25px rgba(102, 187, 106, 0.25);
+      cursor: default;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 16px 35px rgba(102, 187, 106, 0.45);
+    }
+
+    .card h3 {
+      color: #388e3c;
+      margin-bottom: 12px;
+      font-weight: 800;
+      font-size: 22px;
+      user-select: none;
+    }
+
+    .card p {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1b5e20;
+      letter-spacing: 0.8px;
+    }
+
+    .card p.animate-bounce {
+      animation: bounce 1.6s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* Recent activity */
+    .activity {
+      background: white;
+      border-radius: 20px;
+      padding: 35px 40px;
+      box-shadow: 0 10px 25px rgba(102, 187, 106, 0.25);
+      max-width: 700px;
+      margin: 0 auto 60px auto;
+      user-select: none;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .activity h3 {
+      color: #388e3c;
+      margin-bottom: 30px;
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: 0.6px;
+    }
+
+    .activity ul {
+      list-style: none;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #81c784 #e0e0e0;
+    }
+
+    .activity ul::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .activity ul::-webkit-scrollbar-track {
+      background: #e0e0e0;
+      border-radius: 6px;
+    }
+
+    .activity ul::-webkit-scrollbar-thumb {
+      background-color: #81c784;
+      border-radius: 6px;
+    }
+
+    .activity ul li {
+      padding: 18px 12px;
+      border-bottom: 1px solid #dcedc8;
+      font-size: 16px;
+      color: #4a6351;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      cursor: default;
+      border-radius: 8px;
+    }
+
+    .activity ul li:hover {
+      background-color: #dcedc8;
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    /* Equipment request form */
+    .request-form {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 50px;
+      box-shadow: 0 10px 25px rgba(102, 187, 106, 0.25);
+      max-width: 650px;
+      margin: 30px auto;
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    .request-form h3 {
+      color: #388e3c;
+      margin-bottom: 35px;
+      font-weight: 800;
+      text-align: center;
+      font-size: 28px;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+
+    .request-form form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .request-form label {
+      font-weight: 700;
+      color: #2e7d32;
+      margin-bottom: 8px;
+      font-size: 17px;
+      user-select: none;
+    }
+
+    .request-form input[type="text"],
+    .request-form input[type="date"],
+    .request-form select,
+    .request-form textarea {
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 2px solid #a5d6a7;
+      font-size: 17px;
+      outline: none;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.07);
+      background: #f9fff9;
+      width: 100%;
+    }
+
+    .request-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .request-form input[type="text"]:focus,
+    .request-form input[type="date"]:focus,
+    .request-form select:focus,
+    .request-form textarea:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 12px #a5d6a7;
+      background: #e8f5e9;
+    }
+
+    .request-form button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 20px;
+      font-weight: 900;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background-color 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 6px 18px rgba(76, 175, 80, 0.5);
+      user-select: none;
+      margin-top: 20px;
+    }
+
+    .request-form button:hover {
+      background: #388e3c;
+      box-shadow: 0 8px 24px rgba(56, 142, 60, 0.7);
+    }
+
+    /* Equipment Marketplace */
+    .marketplace {
+      padding: 20px 0;
+    }
+    
+    .section-title {
+      font-size: 32px;
+      color: #2e7d32;
+      margin-bottom: 30px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      user-select: none;
+      animation: slideInHeader 0.7s ease forwards;
+    }
+
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    .equipment-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(102, 187, 106, 0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .equipment-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 16px 35px rgba(102, 187, 106, 0.45);
+    }
+
+    .equipment-image {
+      height: 200px;
+      width: 100%;
+      object-fit: cover;
+      border-bottom: 1px solid #dcedc8;
+    }
+
+    .equipment-details {
+      padding: 25px;
+    }
+
+    .equipment-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #388e3c;
+    }
+
+    .equipment-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1b5e20;
+      margin-bottom: 15px;
+    }
+
+    .equipment-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #4a6351;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    .add-to-cart {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 6px 18px rgba(76, 175, 80, 0.5);
+    }
+
+    .add-to-cart:hover {
+      background: #388e3c;
+      box-shadow: 0 8px 24px rgba(56, 142, 60, 0.7);
+    }
+
+    /* Hide sections by default */
+    .hidden {
+      display: none !important;
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background: linear-gradient(135deg, #232b2b 0%, #1a3a1a 100%);
+      color: #e0e0e0;
+    }
+    body.dark-mode .sidebar {
+      background: #222e22;
+      color: #e0e0e0;
+      box-shadow: 3px 0 15px rgba(0,0,0,0.4);
+    }
+    body.dark-mode .sidebar nav a {
+      color: #e0e0e0;
+    }
+    body.dark-mode .sidebar nav a.active,
+    body.dark-mode .sidebar nav a:hover {
+      background: #2e7031;
+      color: #a8e063;
+    }
+    body.dark-mode .main-content {
+      background: transparent;
+      color: #e0e0e0;
+    }
+    body.dark-mode .card,
+    body.dark-mode .activity,
+    body.dark-mode .request-form,
+    body.dark-mode .equipment-card {
+      background: #232b2b;
+      color: #e0e0e0;
+      box-shadow: 0 10px 25px rgba(30,60,30,0.45);
+    }
+    body.dark-mode .card h3,
+    body.dark-mode .activity h3,
+    body.dark-mode .request-form h3,
+    body.dark-mode .equipment-title,
+    body.dark-mode .request-form label {
+      color: #a8e063;
+    }
+    body.dark-mode .request-form input,
+    body.dark-mode .request-form select,
+    body.dark-mode .request-form textarea {
+      background: #1a2a1a;
+      color: #e0e0e0;
+      border-color: #4caf50;
+    }
+    body.dark-mode .request-form input:focus,
+    body.dark-mode .request-form select:focus,
+    body.dark-mode .request-form textarea:focus {
+      background: #232b2b;
+      border-color: #a8e063;
+    }
+    body.dark-mode .request-form button,
+    body.dark-mode .add-to-cart {
+      background: #2e7031;
+      color: #fff;
+    }
+    body.dark-mode .request-form button:hover,
+    body.dark-mode .add-to-cart:hover {
+      background: #388e3c;
+    }
+    body.dark-mode header {
+      border-bottom: 2px solid #333;
+    }
+    body.dark-mode .profile span,
+    body.dark-mode .profile div {
+      color: #a8e063;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 25px 20px;
+        box-shadow: none;
+        animation: none;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 25px 20px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .request-form {
+        max-width: 100%;
+        padding: 25px 20px;
+      }
+      
+      .equipment-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .profile span {
+        display: none;
+      }
+
+      .request-form h3 {
+        font-size: 24px;
+      }
+
+      .request-form button {
+        font-size: 18px;
+        padding: 14px;
+      }
+      
+      .equipment-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .xxyy{
+        margin-top: 500px;
+    }
+  </style>
+</head>
+
+
+<body>
+  <aside class="sidebar">
+    <h2><img src="1.jpg" alt="" height="40" width="40" style="border-radius: 50%;">KrishiSeba</h2>
+    <nav>
+      <a href="#" class="active" data-section="dashboard">Dashboard</a>
+      <a href="equipment.html" data-section="marketplace">Equipment Marketplace</a>
+      <a href="requests.html" data-section="requests">My Requests</a>
+      <a href="showFarmerorder.html" data-section="orders">My Orders</a>
+      <a href="messages.html" data-section="messages">Messages</a>
+      <a href="profile.html">My Profile</a>
+      <a href="loginPageFarmer.html" data-section="logout"> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <!-- Dashboard Section -->
+    <section id="dashboard-section">
+      <header>
+        <h1>Welcome, Korim Uddin!</h1>
+        <div class="profile" title="Farmer Profile">
+          <img src="krishi.png" alt="Profile Picture" />
+          <div>
+            <span>Korim Uddin (Farmer)</span><br />
+            <div class="location">Location: Chittagong, Anwara</div>
+          </div>
+        </div>
+        <button id="themeToggle" style="margin-left:20px; padding:8px 18px; border-radius:8px; border:none; background:#388e3c; color:#fff; font-weight:700; cursor:pointer;">
+          🌙 Dark Mode
+        </button>
+      </header>
+
+      <section class="cards">
+        <div class="card">
+          <h3>Active Rentals</h3>
+          <p>5</p>
+        </div>
+        <div class="card">
+          <h3>Pending Requests</h3>
+          <p class="animate-bounce">3</p>
+        </div>
+        <div class="card">
+          <h3>Messages</h3>
+          <p>7</p>
+        </div>
+        <div class="card">
+          <h3>Notifications</h3>
+          <p>4</p>
+        </div>
+      </section>
+
+      <section class="activity">
+        <h3>Recent Activity</h3>
+        <ul>
+          <li>Tractor request approved - May 15, 2025</li>
+          <li>New message from Provider XYZ</li>
+          <li>Harvester rental confirmed for June 1</li>
+          <li>Payment received for seed drill</li>
+          <li>Profile updated successfully</li>
+        </ul>
+      </section>
+    </section>
+
+   
+
+    <!-- Equipment Requests Section -->
+    <section id="requests-section" class="hidden">
+      <header>
+        <h1>My Rental Requests</h1>
+        <div class="profile">
+          <img src="krishi.png" alt="Profile Picture" />
+          <span>Korim Uddin</span>
+        </div>
+      </header>
+
+      <div class="request-form">
+        <h3>Request Equipment</h3>
+        <form id="equipmentRequestForm">
+          <div>
+            <label for="eqType">Equipment Type</label>
+            <select id="eqType" name="eqType" required>
+              <option value="">Select equipment</option>
+              <option value="tractor">Tractor</option>
+              <option value="harvester">Harvester</option>
+              <option value="plow">Plow</option>
+              <option value="irrigation">Irrigation System</option>
+            </select>
+          </div>
+          <div>
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate" name="startDate" required />
+          </div>
+          <div>
+            <label for="duration">Duration (days)</label>
+            <input type="number" id="duration" name="duration" min="1" required />
+          </div>
+          <div>
+            <label for="notes">Special Requests</label>
+            <textarea id="notes" name="notes" placeholder="Any special requirements..."></textarea>
+          </div>
+          <button type="submit">Submit Request</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Other sections would go here with similar structure -->
+  </main>
+<script>
+// Sidebar navigation: show/hide sections
+document.querySelectorAll('.sidebar nav a').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+        // Remove active from all
+        document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+
+        // Hide all main sections
+        document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+
+        // Show the selected section if it exists
+        const sectionId = this.getAttribute('data-section');
+        if (sectionId && document.getElementById(sectionId + '-section')) {
+            document.getElementById(sectionId + '-section').classList.remove('hidden');
+        }
+        // Prevent default only for internal navigation
+        if (this.getAttribute('href') === '#') e.preventDefault();
+    });
+});
+
+// Equipment request form confirmation
+const reqForm = document.getElementById('equipmentRequestForm');
+if (reqForm) {
+    reqForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert("Your equipment request has been submitted!");
+        reqForm.reset();
+    });
+}
+
+// Theme toggle functionality
+const themeToggleBtn = document.getElementById('themeToggle');
+let darkMode = false;
+
+themeToggleBtn.addEventListener('click', function() {
+    darkMode = !darkMode;
+    if (darkMode) {
+        document.body.style.backgroundColor = '#121212';
+        document.body.style.color = '#e0e0e0';
+        document.querySelectorAll('.sidebar, .main-content, .request-form, .activity, .card, .equipment-card').forEach(el => {
+            el.style.backgroundColor = '#1e1e1e';
+            el.style.color = '#e0e0e0';
+        });
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.style.backgroundColor = '#2c2c2c';
+            el.style.color = '#e0e0e0';
+            el.style.borderColor = '#444';
+        });
+        themeToggleBtn.innerHTML = '🌞 Light Mode';
+    } else {
+        document.body.style.backgroundColor = '';
+        document.body.style.color = '';
+        document.querySelectorAll('.sidebar, .main-content, .request-form, .activity, .card, .equipment-card').forEach(el => {
+            el.style.backgroundColor = '';
+            el.style.color = '';
+        });
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.style.backgroundColor = '';
+            el.style.color = '';
+            el.style.borderColor = '';
+        });
+        themeToggleBtn.innerHTML = '🌙 Dark Mode';
+    }
+});
+
+const themeToggle = document.getElementById('themeToggle');
+const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+// Set initial mode from localStorage or system preference
+if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && prefersDark)) {
+  document.body.classList.add('dark-mode');
+  if(themeToggle) themeToggle.textContent = "☀️ Light Mode";
+}
+
+if(themeToggle) {
+  themeToggle.addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    if(document.body.classList.contains('dark-mode')) {
+      themeToggle.textContent = "☀️ Light Mode";
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeToggle.textContent = "🌙 Dark Mode";
+      localStorage.setItem('theme', 'light');
+    }
+  });
+}
+</script>
+  </main>
+  
+</body>
+</html>

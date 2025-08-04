@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Messages | KrishiSeba</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0ffe7 0%, #a8e063 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .messages-container {
+      display: flex;
+      width: 90vw;
+      max-width: 950px;
+      height: 80vh;
+      background: rgba(255,255,255,0.97);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(56,142,60,0.13);
+      overflow: hidden;
+    }
+    .contacts-list {
+      width: 240px;
+      background: #a8e063;
+      color: #fff;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      border-right: 2px solid #e0e0e0;
+    }
+    .contacts-list h2 {
+      margin: 0;
+      padding: 22px 0 12px 0;
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      background: #388e3c;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .contact {
+      padding: 16px 22px;
+      cursor: pointer;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 1.08em;
+      transition: background 0.15s, color 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .contact.active, .contact:hover {
+      background: #388e3c;
+      color: #fff;
+    }
+    .contact-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      background: #e0ffe7;
+    }
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f8fff4;
+      position: relative;
+    }
+    .chat-header {
+      padding: 18px 24px;
+      background: #fff;
+      border-bottom: 1.5px solid #a8e063;
+      font-size: 1.15em;
+      font-weight: 700;
+      color: #388e3c;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 24px 18px 12px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message {
+      max-width: 65%;
+      padding: 12px 18px;
+      border-radius: 16px;
+      font-size: 1.05em;
+      line-height: 1.5;
+      box-shadow: 0 2px 8px #a8e06322;
+      position: relative;
+      word-break: break-word;
+      margin-bottom: 2px;
+      display: inline-block;
+      clear: both;
+    }
+    .message.sent {
+      background: linear-gradient(90deg, #a8e063 60%, #66bb6a 100%);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+      margin-left: auto;
+    }
+    .message.received {
+      background: #fff;
+      color: #388e3c;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      margin-right: auto;
+    }
+    .chat-input-area {
+      display: flex;
+      padding: 16px 18px;
+      background: #fff;
+      border-top: 1.5px solid #a8e063;
+      align-items: center;
+      gap: 10px;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #a8e063;
+      font-size: 1.08em;
+      background: #f8fff4;
+      color: #222;
+      transition: border 0.2s;
+    }
+    .chat-input:focus {
+      border-color: #388e3c;
+      outline: none;
+    }
+    .send-btn {
+      background: linear-gradient(90deg, #66bb6a 60%, #a8e063 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 22px;
+      font-size: 1.08em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 2px 10px #a8e06322;
+      letter-spacing: 0.2px;
+    }
+    .send-btn:hover {
+      background: linear-gradient(90deg, #388e3c 60%, #a8e063 100%);
+      transform: scale(1.06);
+    }
+    @media (max-width: 900px) {
+      .messages-container { width: 99vw; }
+      .contacts-list { width: 120px; }
+      .contact { font-size: 0.98em; padding: 10px 8px; }
+      .chat-header { font-size: 1em; padding: 10px 8px; }
+      .chat-messages { padding: 10px 6px 8px 6px; }
+      .chat-input-area { padding: 8px 6px; }
+    }
+    @media (max-width: 600px) {
+      .messages-container { flex-direction: column; height: 98vh; }
+      .contacts-list { width: 100vw; flex-direction: row; border-right: none; border-bottom: 2px solid #e0e0e0; }
+      .contact { flex: 1 1 0; border-bottom: none; border-right: 1px solid #e0e0e0; justify-content: center; }
+      .chat-area { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="messages-container">
+    <div class="contacts-list" id="contactsList">
+      <h2>Contacts</h2>
+      <div class="contact active" data-contact="Provider ">
+        <img src="emon.jpg" class="contact-avatar" alt="Provider ">
+        Provider 
+      </div>
+      <div class="contact" data-contact="Admin">
+        <img src="1.jpg" class="contact-avatar" alt="Admin">
+        KrishiSeba Support
+      </div>
+    </div>
+    <div class="chat-area">
+      <div class="chat-header" id="chatHeader">
+        <img src="emon.jpg" class="contact-avatar" style="width:32px;height:32px;">
+        <span id="chatContactName">Provider Emon</span>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message received">Hello! Your tractor request has been approved.</div>
+        <div class="message sent">Thank you! When will it be delivered?</div>
+        <div class="message received">Tomorrow morning. Our team will contact you.</div>
+      </div>
+      <form class="chat-input-area" id="chatForm" autocomplete="off">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." required />
+        <button type="submit" class="send-btn">Send</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Contact switching logic
+    const contacts = document.querySelectorAll('.contact');
+    const chatHeader = document.getElementById('chatHeader');
+    const chatContactName = document.getElementById('chatContactName');
+    const chatMessages = document.getElementById('chatMessages');
+
+    // Example messages for each contact
+    const messagesData = {
+      "Provider XYZ": [
+        { type: "received", text: "Hello! Your tractor request has been approved." },
+        { type: "sent", text: "Thank you! When will it be delivered?" },
+        { type: "received", text: "Tomorrow morning. Our team will contact you." }
+      ],
+      "Admin": [
+        { type: "received", text: "Welcome to KrishiSeba! Let us know if you need any help." }
+      ]
+    };
+
+    contacts.forEach(contact => {
+      contact.addEventListener('click', function() {
+        contacts.forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const name = this.getAttribute('data-contact');
+        chatContactName.textContent = name;
+        // Update avatar
+        chatHeader.querySelector('img').src = this.querySelector('img').src;
+        // Load messages
+        chatMessages.innerHTML = '';
+        (messagesData[name] || []).forEach(msg => {
+          const div = document.createElement('div');
+          div.className = 'message ' + msg.type;
+          div.textContent = msg.text;
+          chatMessages.appendChild(div);
+        });
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+    });
+
+    // Sending a message
+    document.getElementById('chatForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if(!text) return;
+      // Add sent message
+      const div = document.createElement('div');
+      div.className = 'message sent';
+      div.textContent = text;
+      chatMessages.appendChild(div);
+      input.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      // Optionally, you can add a fake reply after a delay
+      // setTimeout(() => {
+      //   const reply = document.createElement('div');
+      //   reply.className = 'message received';
+      //   reply.textContent = "Thank you for your message!";
+      //   chatMessages.appendChild(reply);
+      //   chatMessages.scrollTop = chatMessages.scrollHeight;
+      // }, 1200);
+    });
+  </script>
+</body>
+</html>

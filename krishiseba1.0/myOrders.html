@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Orders | KrishiSeba</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: linear-gradient(135deg, #d0f0c0 0%, #a1d99b 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #2e3a26;
+      display: flex;
+      overflow-x: hidden;
+    }
+    .sidebar {
+      width: 260px;
+      background: #4caf50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      position: fixed;
+      height: 100vh;
+      box-shadow: 3px 0 15px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 50px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      user-select: none;
+      text-shadow: 1px 1px 2px #2e7d32;
+      font-size: 28px;
+      animation: pulseText 3s infinite ease-in-out;
+    }
+    @keyframes pulseText {
+      0%,100% { color: #e8f5e9; text-shadow: 0 0 8px #81c784; }
+      50% { color: #a5d6a7; text-shadow: 0 0 12px #66bb6a; }
+    }
+    .sidebar nav a {
+      color: white;
+      text-decoration: none;
+      padding: 16px 22px;
+      margin-bottom: 14px;
+      border-radius: 10px;
+      display: block;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      box-shadow: 0 0 5px transparent;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background-color 0.4s, box-shadow 0.4s;
+    }
+    .sidebar nav a::before {
+      content: '';
+      position: absolute;
+      left: -100%;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.15);
+      transition: left 0.4s;
+      border-radius: 10px;
+      z-index: 1;
+    }
+    .sidebar nav a:hover::before { left: 0; }
+    .sidebar nav a:hover, .sidebar nav a.active {
+      background: #388e3c;
+      box-shadow: 0 0 15px #388e3c;
+      z-index: 2;
+      color: #dcedc8;
+    }
+    .main-content {
+      margin-left: 260px;
+      padding: 40px 0 40px 0;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: transparent;
+      animation: fadeInContent 0.8s ease forwards;
+    }
+    @keyframes fadeInContent {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .orders-section {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(102, 187, 106, 0.18);
+      padding: 38px 28px 32px 28px;
+      max-width: 900px;
+      width: 100%;
+      margin-bottom: 36px;
+      animation: fadeUp 0.7s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .orders-section h2 {
+      color: #388e3c;
+      font-size: 1.5em;
+      margin-bottom: 18px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      background: #f9fff9;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(56,142,60,0.10);
+    }
+    .orders-table th, .orders-table td {
+      padding: 14px 16px;
+      text-align: left;
+    }
+    .orders-table th {
+      background: #388e3c;
+      color: #fff;
+      font-weight: 700;
+    }
+    .orders-table tr:nth-child(even) {
+      background: #f6fff6;
+    }
+    .orders-table tr:hover {
+      background: #e8f5e9;
+    }
+    .status {
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 6px 16px;
+      display: inline-block;
+      font-size: 0.98em;
+    }
+    .status.pending { background: #fffde7; color: #fbc02d; border: 1px solid #fbc02d;}
+    .status.completed { background: #e8f5e9; color: #43a047; border: 1px solid #43a047;}
+    .status.cancelled { background: #ffebee; color: #e53935; border: 1px solid #e53935;}
+    .action-btn {
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 1em;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.13);
+    }
+    .action-btn:hover {
+      background: #388e3c;
+      box-shadow: 0 6px 18px rgba(56, 142, 60, 0.18);
+    }
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: #323232;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 1.1em;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: opacity 0.4s;
+    }
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @media (max-width: 900px) {
+      .main-content { margin-left: 0; padding: 20px 0;}
+      .sidebar { position: relative; width: 100%; height: auto; padding: 25px 20px;}
+      .orders-section { padding: 18px 4px;}
+    }
+    @media (max-width: 600px) {
+      .orders-section { padding: 8px 2px; }
+      .sidebar h2 { font-size: 1.1em;}
+      .orders-table th, .orders-table td { font-size: 0.95em;}
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <h2>
+      <img src="1.jpg" alt="" height="50" width="50" style="border-radius:50px;vertical-align:middle;margin-right:10px;">
+      KrishiSeba
+    </h2>
+    <nav>
+      <a href="provederDashboard.html" data-section="dashboard">Dashboard</a>
+      <a href="addEqupment.html" data-section="add-equipment">Add Equipment</a>
+      <a href="myequpment.html" data-section="my-equipment">My Equipment</a>
+      <a href="myProfile.html" data-section="myProfile">My Profile</a>
+      <a href="myOrders.html" class="active" data-section="myOrders">Orders</a>
+      <a href="myMessages.html" data-section="myMessages">Messages</a>
+      <a href="login.html" data-section="logout">Logout</a>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <div class="orders-section">
+      <h2>My Orders</h2>
+      <table class="orders-table" id="ordersTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Equipment</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Tractor Model X</td>
+            <td>2025-07-30</td>
+            <td><span class="status pending">Pending</span></td>
+            <td>৳ 2,000</td>
+            <td>
+              <button class="action-btn cancel-btn">Cancel</button>
+              <button class="action-btn details-btn">Details</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Power Tiller</td>
+            <td>2025-07-25</td>
+            <td><span class="status completed">Completed</span></td>
+            <td>৳ 1,500</td>
+            <td>
+              <button class="action-btn details-btn">Details</button>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Rice Transplanter</td>
+            <td>2025-07-20</td>
+            <td><span class="status cancelled">Cancelled</span></td>
+            <td>৳ 1,800</td>
+            <td>
+              <button class="action-btn details-btn">Details</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="toast" class="toast"></div>
+  </main>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Sidebar active state
+  document.querySelectorAll('.sidebar nav a').forEach(function(item) {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Toast notification
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  // Use event delegation for dynamic and static buttons
+  document.getElementById('ordersTable').addEventListener('click', function(e) {
+    // Cancel button
+    if (e.target.classList.contains('cancel-btn')) {
+      const row = e.target.closest('tr');
+      const statusSpan = row.querySelector('.status');
+      if (statusSpan && statusSpan.classList.contains('pending')) {
+        statusSpan.textContent = 'Cancelled';
+        statusSpan.className = 'status cancelled';
+        e.target.remove();
+        showToast('Order cancelled!');
+      }
+    }
+    // Details button
+    if (e.target.classList.contains('details-btn')) {
+      const row = e.target.closest('tr');
+      const equipment = row.children[1].textContent;
+      const date = row.children[2].textContent;
+      const status = row.children[3].textContent;
+      const amount = row.children[4].textContent;
+      alert(
+        `Order Details:\n\nEquipment: ${equipment}\nDate: ${date}\nStatus: ${status}\nAmount: ${amount}`
+      );
+    }
+  });
+});
+  </script>
+</body>
+</html>

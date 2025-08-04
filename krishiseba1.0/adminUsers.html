@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Users | KrishiSeba</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: linear-gradient(270deg, #ffffff 50%, #a8e063 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 240px;
+            background: #388e3c;
+            color: #fff;
+            padding: 40px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 18px rgba(56,142,60,0.08);
+        }
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 1.7em;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .sidebar-nav a {
+            padding: 16px 40px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.08em;
+            border-left: 4px solid transparent;
+            transition: background 0.2s, color 0.2s;
+        }
+        .sidebar-nav a.active,
+        .sidebar-nav a:hover {
+            background: #2e7031;
+            color: #a8e063;
+            border-left: 4px solid #a8e063;
+        }
+        .main-content {
+            flex: 1;
+            padding: 48px 40px 32px 40px;
+            margin-left: 240px;
+        }
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
+        .dashboard-header h1 {
+            font-size: 2em;
+            color: #032433;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .search-box {
+            margin-bottom: 24px;
+        }
+        .search-box input {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 1px solid #b2dfdb;
+            font-size: 1em;
+            width: 260px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(56,142,60,0.10);
+        }
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+        }
+        th {
+            background: #388e3c;
+            color: #fff;
+            font-weight: 700;
+        }
+        tr:nth-child(even) {
+            background: #f6fff6;
+        }
+        tr:hover {
+            background: #e8f5e9;
+        }
+        .action-btn {
+            background: #66bb6a;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 16px;
+            font-size: 0.98em;
+            cursor: pointer;
+            margin-right: 6px;
+            transition: background 0.2s;
+        }
+        .action-btn:hover {
+            background: #388e3c;
+        }
+        @media (max-width: 900px) {
+            .main-content { padding: 18px 4px; margin-left: 0;}
+            .sidebar { width: 100%; height: auto; flex-direction: row; padding: 18px 0;}
+            .sidebar-nav { flex-direction: row; justify-content: center;}
+            .sidebar-nav a { padding: 12px 18px; font-size: 1em;}
+        }
+        @media (max-width: 600px) {
+            .dashboard-header h1 { font-size: 1.2em;}
+            .main-content { padding: 10px;}
+            .sidebar h2 { font-size: 1.1em;}
+            table, th, td { font-size: 0.95em;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>
+                <img src="1.jpg" alt="Logo" class="sidebar-logo">
+                Admin Panel
+            </h2>
+            <nav class="sidebar-nav">
+                <a href="AdminDashboard.html" data-section="dashboard">Dashboard</a>
+                <a href="adminUsers.html" class="active" data-section="users">Users</a>
+                <a href="adminPosts.html" data-section="posts">Posts</a>
+                <a href="adminReports.html" data-section="reports">Reports</a>
+                <a href="adminSettings.html" data-section="settings">Settings</a>
+                <a href="loginForAdmin.html" data-section="logout">Logout</a>
+            </nav>
+        </aside>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1>Manage Users</h1>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search users by name or email...">
+            </div>
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example users, replace with dynamic data as needed -->
+                    <tr>
+                        <td>1</td>
+                        <td>Rahim Uddin</td>
+                        <td>rahim@gmail.com</td>
+                        <td>Farmer</td>
+                        <td class="status">Active</td>
+                        <td>
+                            <button class="action-btn edit-btn">Edit</button>
+                            <button class="action-btn block-btn">Block</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Karim Mia</td>
+                        <td>karim@gmail.com</td>
+                        <td>Dealer</td>
+                        <td class="status">Blocked</td>
+                        <td>
+                            <button class="action-btn edit-btn">Edit</button>
+                            <button class="action-btn block-btn">Unblock</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Shila Akter</td>
+                        <td>shila@gmail.com</td>
+                        <td>Farmer</td>
+                        <td class="status">Active</td>
+                        <td>
+                            <button class="action-btn edit-btn">Edit</button>
+                            <button class="action-btn block-btn">Block</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Edit User Modal -->
+    <div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); align-items:center; justify-content:center; z-index:1000;">
+        <div style="background:#fff; padding:32px 28px; border-radius:12px; min-width:320px; box-shadow:0 8px 32px rgba(56,142,60,0.18); position:relative;">
+            <h2 style="margin-top:0;">Edit User</h2>
+            <form id="editForm">
+                <div style="margin-bottom:14px;">
+                    <label>Name:<br>
+                        <input type="text" id="editName" style="width:100%;padding:8px;">
+                    </label>
+                </div>
+                <div style="margin-bottom:14px;">
+                    <label>Email:<br>
+                        <input type="email" id="editEmail" style="width:100%;padding:8px;">
+                    </label>
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label>Role:<br>
+                        <select id="editRole" style="width:100%;padding:8px;">
+                            <option>Farmer</option>
+                            <option>Dealer</option>
+                            <option>Admin</option>
+                        </select>
+                    </label>
+                </div>
+                <button type="submit" class="action-btn" style="margin-right:10px;">Save</button>
+                <button type="button" class="action-btn" id="cancelEdit" style="background:#ccc; color:#222;">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Sidebar active state
+        document.querySelectorAll('.sidebar-nav a').forEach(function(item) {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // User search filter
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#usersTable tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
+        });
+
+        // Edit feature
+        let currentEditRow = null;
+        document.querySelectorAll('.edit-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                currentEditRow = this.closest('tr');
+                document.getElementById('editName').value = currentEditRow.children[1].textContent;
+                document.getElementById('editEmail').value = currentEditRow.children[2].textContent;
+                document.getElementById('editRole').value = currentEditRow.children[3].textContent;
+                document.getElementById('editModal').style.display = 'flex';
+            });
+        });
+
+        document.getElementById('cancelEdit').onclick = function() {
+            document.getElementById('editModal').style.display = 'none';
+        };
+
+        document.getElementById('editForm').onsubmit = function(e) {
+            e.preventDefault();
+            if (currentEditRow) {
+                currentEditRow.children[1].textContent = document.getElementById('editName').value;
+                currentEditRow.children[2].textContent = document.getElementById('editEmail').value;
+                currentEditRow.children[3].textContent = document.getElementById('editRole').value;
+            }
+            document.getElementById('editModal').style.display = 'none';
+        };
+
+        // Block/Unblock functionality
+        document.querySelectorAll('.block-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const statusCell = row.querySelector('.status');
+                if (this.textContent === 'Block') {
+                    statusCell.textContent = 'Blocked';
+                    this.textContent = 'Unblock';
+                } else {
+                    statusCell.textContent = 'Active';
+                    this.textContent = 'Block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
