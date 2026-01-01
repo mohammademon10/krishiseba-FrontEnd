@@ -3,7 +3,7 @@
   <img src="1.jpg" alt="Krishiseba Logo" width="120" height="120" />
 
   # 🌾 KrishiSeba 
-  **Empowering Agriculture through Digital Management**
+  **Modern Agricultural Equipment Rental Platform**
 
   [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
   [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
@@ -17,8 +17,7 @@
 ---
 
 ## 📖 Overview
-**Krishiseba** is a high-performance frontend solution designed to digitize the agricultural ecosystem. It connects **Farmers**, **Service Providers**, and **Administrators** in one seamless interface, making the rental of harvesting and ploughing equipment as easy as a few clicks.
-
+KrishiSeba is a web-based agricultural platform that bridges the gap between farmers and equipment providers. This repository contains the entire frontend in a single HTML file integrating HTML, CSS, and JavaScript, making it simple to run and deploy.
 ---
 
 ## 🚀 Key Modules
