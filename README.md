@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="1.png" alt="Krishiseba Logo" width="120" height="120" />
+  <img src="1.jpg" alt="Krishiseba Logo" width="120" height="120" />
 
   # 🌾 KrishiSeba 
   **Empowering Agriculture through Digital Management**
